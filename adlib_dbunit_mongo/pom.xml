@@ -1,13 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.adclear</groupId>
-	<artifactId>adlib_dbunit_mongo</artifactId>
+	<groupId>com.gotoagile</groupId>
+	<artifactId>dbunit_mongo</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
 
 	<scm>
-		<connection>scm:svn:https://dbunit-mongodb.googlecode.com/svn/adlib_dbunit_mongo/trunk</connection>
-		<developerConnection>scm:svn:https://dbunit-mongodb.googlecode.com/svn/adlib_dbunit_mongo/trunk</developerConnection>
+		<connection>scm:svn:https://github.com/cuvaalex/dbunit-mongodb.git</connection>
+		<developerConnection>scm:svn:https://github.com/cuvaalex/dbunit-mongodb.git</developerConnection>
+        <tag>master</tag>
 	</scm>
 
 	<dependencies>
