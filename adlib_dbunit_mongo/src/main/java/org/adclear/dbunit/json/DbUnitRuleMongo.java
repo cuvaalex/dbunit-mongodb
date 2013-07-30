@@ -9,6 +9,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import lombok.Getter;
 
 import org.adclear.dbunit.json.annotations.JsonData;
@@ -41,12 +44,12 @@ public class DbUnitRuleMongo implements MethodRule {
 	private MongoDatabaseTester databaseTester;
 
 	@Getter
-	private MongoURI mongoUri;
+	private MongoClientURI mongoUri;
 
 	public DbUnitRuleMongo(Class<?> resourceBase, String url) {
 		this.resourceBase = resourceBase;
 		try {
-			mongoUri = new MongoURI(url);
+			mongoUri = new MongoClientURI(url);
 
 			databaseTester = new MongoDatabaseTester(mongoUri);
 
@@ -55,7 +58,12 @@ public class DbUnitRuleMongo implements MethodRule {
 		}
 	}
 
-	@Override
+    public DbUnitRuleMongo(Class<?> resourceBase, MongoClient mongoClient, DB db){
+        this.resourceBase = resourceBase;
+        databaseTester = new MongoDatabaseTester(mongoClient, db);
+    }
+
+    @Override
 	public Statement apply(final Statement base, final FrameworkMethod method,
 			final Object target) {
 		return new Statement() {

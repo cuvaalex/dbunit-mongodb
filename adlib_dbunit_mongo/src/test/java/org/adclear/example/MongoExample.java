@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mongodb.*;
 import org.adclear.dbunit.json.DbUnitRuleMongo;
 import org.adclear.dbunit.json.annotations.JsonData;
 import org.adclear.dbunit.json.operation.strategy.MongoDbCleanStrategy;
@@ -13,13 +14,6 @@ import org.adclear.dbunit.json.operation.strategy.MongoDbRefreshLoadStrategy;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.Mongo;
 
 /**
  * The junit test case for the {@link MediaCodeReportBean} class.
@@ -31,7 +25,7 @@ public class MongoExample {
 	
 	private static final String MONGODB_URI = "mongodb://localhost:27017/junit_example.dbunit";
 
-	private Mongo mongo;
+	private MongoClient mongo;
 	
 	private DB db;
 	
@@ -49,7 +43,7 @@ public class MongoExample {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		mongo = new Mongo(dbUnit.getMongoUri());
+		mongo = new MongoClient(dbUnit.getMongoUri());
 		db = mongo.getDB(dbUnit.getMongoUri().getDatabase());
 		dbCollection = db.getCollection(dbUnit.getMongoUri().getCollection());
 	}

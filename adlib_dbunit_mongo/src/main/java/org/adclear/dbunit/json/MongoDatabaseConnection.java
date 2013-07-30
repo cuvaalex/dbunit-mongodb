@@ -3,6 +3,7 @@ package org.adclear.dbunit.json;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.mongodb.MongoClient;
 import lombok.Getter;
 
 import org.dbunit.database.AbstractDatabaseConnection;
@@ -15,19 +16,19 @@ import com.mongodb.Mongo;
 @Getter
 public class MongoDatabaseConnection extends AbstractDatabaseConnection {
 
-	private Mongo mongo;
+	private MongoClient mongo;
 	private DB db;
 
 	/**
 	 * Creates a new <codeMongoDatabaseConnectionM</code>.
 	 * 
 	 * @param mongo
-	 *            the {@link Mongo} instance that is used to load the test data
+	 *            the {@link MongoClient} instance that is used to load the test data
 	 *            into
 	 * @param db
 	 *            the database in which the test data has to be loaded
 	 */
-	public MongoDatabaseConnection(Mongo mongo, DB db) {
+	public MongoDatabaseConnection(MongoClient mongo, DB db) {
 		this.mongo = mongo;
 		this.db = db;
 		getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,

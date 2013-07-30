@@ -2,15 +2,11 @@ package org.adclear.dbunit.json;
 
 import java.net.UnknownHostException;
 
+import com.mongodb.*;
 import lombok.Getter;
 
 import org.dbunit.AbstractDatabaseTester;
 import org.dbunit.database.IDatabaseConnection;
-
-import com.mongodb.DB;
-import com.mongodb.Mongo;
-import com.mongodb.MongoException;
-import com.mongodb.MongoURI;
 
 /**
  * The {@link AbstractDatabaseTester} implementation for mongodb.
@@ -21,18 +17,22 @@ import com.mongodb.MongoURI;
 @Getter
 public class MongoDatabaseTester extends AbstractDatabaseTester {
 
-	private Mongo mongo;
+	private MongoClient mongo;
 
-	private MongoURI mongoURI;
-	
+	private MongoClientURI mongoURI;
+
 	private DB db;
 
-
-	public MongoDatabaseTester(MongoURI uri) throws MongoException, UnknownHostException {
+	public MongoDatabaseTester(MongoClientURI uri) throws MongoException, UnknownHostException {
 		this.mongoURI = uri;
-		this.mongo = new Mongo(uri);
+		this.mongo = new MongoClient(uri);
 		this.db = mongo.getDB(mongoURI.getDatabase());
 	}
+
+    public MongoDatabaseTester(MongoClient mongo, DB db){
+        this.mongo = mongo;
+        this.db = db;
+    }
 
 	/*
 	 * (non-Javadoc)

@@ -11,6 +11,13 @@
         <tag>master</tag>
 	</scm>
 
+    <properties>
+        <!-- Mongo DB Default Config -->
+        <mongodb.driver.version>2.7.2</mongodb.driver.version>
+        <mongodb.version>2.2.1</mongodb.version>
+        <mongodb.port>27017</mongodb.port>
+    </properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.googlecode.lambdaj</groupId>
@@ -36,11 +43,17 @@
 			<version>1.8.5</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongo-java-driver</artifactId>
-			<version>2.7.3</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>1.2.1.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>2.11.2</version>
+        </dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -48,9 +61,46 @@
 			<version>0.11.6</version>
 			<scope>provided</scope>
 		</dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.5.11</version>
+        </dependency>
 	</dependencies>
 
 	<build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.github.joelittlejohn.embedmongo</groupId>
+                    <artifactId>embedmongo-maven-plugin</artifactId>
+                    <version>0.1.8</version>
+                    <configuration>
+                        <port>${mongodb.port}</port>
+                        <!-- optional, default 27017 -->
+                        <randomPort>false</randomPort>
+                        <!-- optional, default is false, if true allocates a random port and overrides embedmongo.port -->
+                        <version>${mongodb.version}</version>
+                        <!-- optional, default 2.2.1 -->
+                        <databaseDirectory>/tmp/mongotest</databaseDirectory>
+                        <!-- optional, default is a new dir in java.io.tmpdir -->
+                        <logging>console</logging>
+                        <!-- optional (file|console|none), default console -->
+                        <logFile>${project.build.directory}/myfile.log</logFile>
+                        <!-- optional, can be used when logging=file, default is ./embedmongo.log -->
+                        <logFileEncoding>utf-8</logFileEncoding>
+                        <!-- optional, can be used when logging=file, default is utf-8 -->
+                        <!--proxyHost>myproxy.company.com</proxyHost-->  <!-- optional, default is none -->
+                        <!--proxyPort>8080</proxyPort-->  <!-- optional, default 80 -->
+                        <!--proxyUser>joebloggs</proxyUser-->  <!-- optional, default is none -->
+                        <!--proxyPassword>pa55w0rd</proxyPassword-->  <!-- optional, default is none -->
+                        <!--bindIp>127.0.0.1</bindIp--> <!-- optional, default is to listen on all interfaces -->
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
@@ -67,6 +117,60 @@
 					</execution>
 				</executions>
 			</plugin>
-		</plugins>
+        </plugins>
 	</build>
+
+    <profiles>
+        <profile>
+            <id>integration-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.15</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <includes>
+                                <include>**/MongoExample.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>MondoDB-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.joelittlejohn.embedmongo</groupId>
+                        <artifactId>embedmongo-maven-plugin</artifactId>
+                        <version>0.1.8</version>
+                        <executions>
+                            <execution>
+                                <id>start</id>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop</id>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
